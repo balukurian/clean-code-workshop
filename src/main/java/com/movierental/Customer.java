@@ -1,15 +1,13 @@
 package com.movierental;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Customer {
     private String name;
     private int frequentRentalPoints;
-    private List<Rental> rentals = new ArrayList<>();
+    private Rentals rentals;
 
     public Customer(String name) {
         this.name = name;
+        this.rentals = new Rentals();
         this.frequentRentalPoints = 0;
     }
 
@@ -22,36 +20,11 @@ public class Customer {
     }
 
     public String statement() {
-        String result = "Rental Record for " + getName() + "\n";
-        for (Rental rental : rentals) {
-
-            //show figures for this rental
-            result += "\t" + rental.getMovie().getTitle() + "\t" +
-                    String.valueOf(rental.charge()) + "\n";
-        }
-
-        //add footer lines result
-        result += "Amount owed is " + String.valueOf(totalAmount()) + "\n";
-        result += "You earned " + String.valueOf(frequentRenterPoints())
-                + " frequent renter points";
-        return result;
+        return new TextStatement().display(rentals, name);
     }
 
-    public int frequentRenterPoints() {
-        int frequentRenterPoints = 0;
-        for (Rental rental : rentals) {
-            frequentRenterPoints += rental.frequentRenterPoints();
-        }
-        return frequentRenterPoints;
-    }
-
-    public double totalAmount() {
-        double totalAmount = 0;
-        for (Rental rental : rentals) {
-            totalAmount += rental.charge();
-
-        }
-        return totalAmount;
+    public String htmlStatement() {
+        return new HtmlStatement().display(rentals, name);
     }
 
 }
